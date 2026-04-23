@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<Platform>x86</Platform>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="coverlet.collector" Version="6.0.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+		<PackageReference Include="xunit" Version="2.5.3" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Appeon.PyPb.Inspector\Appeon.PyPb.Inspector.csproj" />
+		<ProjectReference Include="..\Appeon.PyPb.Tests.Common\Appeon.PyPb.Tests.Common.csproj" />
+		<ProjectReference Include="..\Appeon.PyPb.Utils\Appeon.PyPb.Utils.csproj" />
+		<ProjectReference Include="..\Appeon.PyPb\Appeon.PyPb.csproj">
+		  <Private>True</Private>
+		  <CopyLocalSatelliteAssemblies>True</CopyLocalSatelliteAssemblies>
+		  <ReferenceOutputAssembly>True</ReferenceOutputAssembly>
+		</ProjectReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Xunit" />
+	</ItemGroup>
+
+</Project>

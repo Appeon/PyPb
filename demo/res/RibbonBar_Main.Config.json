@@ -1,0 +1,69 @@
+[
+  {
+    "text": "Basics",
+    "type": "group",
+    "buttons": [
+      {
+        "text": "Module Explorer",
+        "picture": "res\\icons\\module_big.png",
+        "description": "Explore the declared members of a Python module",
+        "min_arch": 32,
+        "view": "u_pythonexplorer"
+      }
+    ]
+  },
+  {
+    "text": "Document processing",
+    "type": "group",
+    "buttons": [
+      {
+        "text": "XLSX Writer",
+        "picture": "res\\icons\\XLSX_big.png",
+        "description": "Export a DataWindow to XLSX using openpyxl through PyPb",
+        "min_arch": 32,
+        "view": "u_excel_writer"
+      },
+      {
+        "text": "XLSX Chart Writer (Wrapper)",
+        "picture": "res\\icons\\XLSX Chart_big.png",
+        "description": "Export a DataWindow to XLSX using openpyxl through a custom wrapper",
+        "min_arch": 32,
+        "view": "u_excel_writer_chart"
+      }
+    ]
+  },
+  {
+    "text": "ML/AI",
+    "type": "group",
+    "buttons": [
+      {
+        "text": "Background Removal",
+        "picture": "res\\icons\\Bg Removal_big.png",
+        "description": "Remove the background of a picture using Rembg through PyPb",
+        "min_arch": 64,
+        "view": "u_rembg"
+      }
+    ]
+  },
+  {
+    "text": "Other",
+    "type": "group",
+    "buttons": [
+      {
+        "text": "Web Crawler",
+        "description": "Use BeautifulSoup to crawl the contents of a Web Page",
+        "picture": "res\\icons\\web crawler_big.png",
+        "min_arch": 32,
+        "view": "u_crawler"
+      },
+
+      {
+        "text": "Plotly Charts",
+        "picture": "res\\icons\\plotly charts_big.png",
+        "description": "Create dynamic HTML charts with Plotly",
+        "min_arch": 64,
+        "view": "u_plotlycharts"
+      }
+    ]
+  }
+]

@@ -1,0 +1,48 @@
+[
+    {
+        "text": "Simple Python",
+        "buttons" : [
+            {
+                "text" : "Community Crawler",
+                "description": "Crawl the Appeon Community and show the top posts",
+                "picture" : "res\\icons\\appeon_communtiy.png",
+                "view" : "u_community_crawler"
+            },
+            {
+                "text" : "Module Explorer",
+                "description": "Explore the members of a Python module",
+                "picture" : "res\\icons\\tree.png",
+                "view" : "u_pythonexplorer"
+            }
+        ]
+    },
+    {
+        "text": "Document processing",
+        "buttons" : [
+            {
+                "text" : "XLSX Writer",
+                "picture" : "res\\icons\\excel_writer.png",
+                "description": "Export a DataWindow as an XLSX file with openpyxl",
+                "view" : "u_excel_writer"
+            },
+            {
+                "text" : "XLSX Chart Writer (Wrapper)",
+                "picture" : "res\\icons\\chart.png",
+                "description": "Export a DataWindow with a chart as an XLSX using a custom builder",
+                "view" : "u_excel_writer_chart"
+            }
+        ]
+    },
+    {
+        "text": "ML/AI",
+        "buttons" : [
+            {
+                "text" : "Background Removal",
+                "picture" : "res\\icons\\background.png",
+                "description": "Remove the background from a picture using rembg",
+                "view" : "u_rembg"
+            }
+        ]
+    }
+
+]

@@ -1,0 +1,6 @@
+Save Format v3.0(19990112)
+@begin Targets
+ 0 "pypbdemoapp_mdi.pbt";
+@end;
+DefaultTarget "pypbdemoapp_mdi.pbt";
+DefaultRemoteTarget "pypbdemoapp_mdi.pbt";

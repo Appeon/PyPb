@@ -1,0 +1,6 @@
+beautifulsoup4
+openpyxl
+Requests
+pillow
+plotly
+pandas

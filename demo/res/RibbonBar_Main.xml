@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<RibbonBar BuiltinTheme="0" Font="FaceName:Tahoma; FontCharSet:ansi!; TextSize:10">
+  <RibbonItems>
+    <ApplicationButton Text="PyPb Demo" Enabled="true" Tag="MyApp" Visible="true">
+      <ApplicationMenu>
+        <Master>
+          <Item Text="Open Home Page" Enabled="true" Tag="openhomepage" Visible="true" PictureName="res\icons\home.png" Checked="false" Type="0" Selected="" Clicked="ue_appmenuaction" Shortcut="">
+          </Item>
+          <Item Text="Close" PictureName="CloseBig!" Checked="false" Enabled="true" Tag="Close" Type="0" Visible="true" Clicked="ue_MenuCloseClicked" Selected="ue_MenuCloseSelected" />
+        </Master>
+      </ApplicationMenu>
+    </ApplicationButton>
+    <Categories>
+      <Category Text="Examples" Enabled="true" Tag="cat_examples" Visible="true">
+        <Panel Text="Tabs" PictureName="TabsSmall!" Enabled="true" Tag="Tabs" Visible="true">
+          <LargeButton Text="Windows" PictureName="SwitchWindowsBig!" Checked="false" DefaultCommand="false" Enabled="true" PowerTipText="History" PowerTipDescription="Recent operations" Shortcut="Ctrl+Shift+H" Tag="History" Visible="true" Clicked="ue_ButtonHistoryClicked" Selected="ue_ButtonHistorySelected">
+            <Menu>
+              <Item Text="----" Enabled="true" Tag="history_item_sample" Visible="false" PictureName="ControlDataWindow!" Checked="false" Type="0" Selected="" Clicked="" Shortcut="">
+              </Item>
+            </Menu>
+          </LargeButton>
+          <Group Visible="true">
+            <SmallButton Text="Close All" PictureName="CloseAllSmall!" Checked="false" DefaultCommand="true" Enabled="true" PowerTipText="Close all" PowerTipDescription="Close all tabs" Shortcut="Ctrl+Shift+C" Tag="Close all" Visible="true" Clicked="ue_CloseButtonClicked"/>
+          </Group>
+          <Group NewLine="true" Visible="true">
+            <SmallButton Text="Close" PictureName="CloseSmall!" Checked="false" DefaultCommand="true" Enabled="true" PowerTipText="Close" PowerTipDescription="Close tab" Tag="Close" Visible="true" Clicked="ue_CloseButtonClicked"/>
+          </Group>
+        </Panel>
+      </Category>
+    </Categories>
+  </RibbonItems>
+</RibbonBar>
