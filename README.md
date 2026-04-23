@@ -14,7 +14,7 @@ This library has the following software requirements:
 
 ## Structure
 
-This repository is organized as follows: 1
+This repository is organized as follows: 
 
 ```
 pypb-repo
