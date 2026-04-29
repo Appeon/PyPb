@@ -91,20 +91,42 @@ Tool that introspects Python objects, modules and functions; returning their mem
 
 Type handling in Python is very different to that of PowerBuilder. Among other things, in Python, there is no strict type enforcing. Instead, it follows a [duck typing strategy](https://en.wikipedia.org/wiki/Duck_typing): an object is of a given type if it has all methods and properties required by that type. This makes it necessary to enforce a strict type conversion when working with Python objects because PowerBuilder uses static typing. The following table shows the types explicitly allowed to be converted from Python to PowerBuilder, as well as the corresponding type for the intermediary C# layer.
 
-| PowerBuilder Type | C# Type | Python type              |
-| ----------------- | ------- | ------------------------ |
-| string            | string  | string                   |
-| long              | Int32   | int                      |
-| double            | double  | float (double precision) |
-| boolean           | bool    | bool                     |
+| Type           | PowerBuilder Type       | C# Type  | Python type | Direct conversion function | Notes                                                        |
+| -------------- | ----------------------- | -------- | ----------- | -------------------------- | ------------------------------------------------------------ |
+| Integer        | `Integer/Long/LongLong` | `Int32`  | `int`       | ✅                          | PB distinguishes int sizes; Python `int` is infinite precision |
+| Floating point | `Real/Double`           | `double` | `float`     | ✅                          | Python's `float` is usually implemented with a C `double`    |
+| Boolean        | `Boolean`               | `bool`   | `bool`      | ✅                          | `True/False` in all three                                    |
+| String         | `String`                | `string` | `str`       | ✅                          | Strings in python are immutable                              |
+| Binary         | `Blob`                  | `byte[]` | `bytes`     | ⬜                          | Currently no direct conversion function                      |
+| Null           | `Null`                  | `null`   | `None`      | ⬜                          | Represents absence of value                                  |
 
-> Note: Python's `float` type is double precision in CPython
+##### Date and Time types
+
+| Type       | PowerBuilder           | C#         | Python               | Notes              |
+| ---------- | ---------------------- | ---------- | -------------------- | ------------------ |
+| DateTime   | `DateTime`             | `DateTime` | `datetime.datetime`  | Full date and time |
+| Date       | `Date`                 | `DateOnly` | `datetime.date`      | Date only          |
+| Time       | `Time`                 | `TimeOnly` | `datetime.time`      | Time only          |
+| Time delta | (no direct equivalent) | `TimeSpan` | `datetime.timedelta` | Time inverval      |
+
+> Currently PyPb does not support passing date/time objects between boundaries.
+
+##### Collection/Containers
+
+| Type       | PowerBuilder    | C#                | Python  | Notes                      |
+| ---------- | --------------- | ----------------- | ------- | -------------------------- |
+| List       | Array           | `List<T>`         | `list`  | Mutable ordered sequence   |
+| Tuple      | (No equivalent) | `Tuple<T1...Tn>`  | `tuple` | Unmutable ordered sequence |
+| Dictionary | (No equivalent) | `Dictionary<K,V>` | `dict`  | Key-value mapping          |
+| Set        | (No equivalent) | `HashSet<T>`      | `set`   | Unordered, unique          |
+
+> There's no conversion functions between PowerBuilder's Arrays and Python lists, however you can use `n_cst_pypbcontext.of_executestatement(...)` to directly construct these container types directly into python. 
 
 This table only shows the types that can be converted from Python to PowerBuilder native variables; there is no limitation on the types of Python objects that can be held on an `n_cst_pypbobject` instance. Any Python object can be held on an `n_cst_pypbobject`, and thus, passed to Python function calls (with `of_invoke`, `of_instantiate`) or set as Python object properties (with `of_set`, `of_setAtIndex`, `of_setAtKey`).
 
 ##### Conversion functions
 
-`n_cst_pypbobject` has a set of functions to perform the conversion from Python to PowerBuilder types. Because Python objects aren't explicitly typed, whether or not an object can be converted to any specific type is not know until runtime, thus it's expected to get errors when attempting to convert an object to a PowerBuilder type.
+`n_cst_pypbobject` has a set of functions to perform the conversion from Python to PowerBuilder, for the most commonly used types. Because Python objects aren't explicitly typed, whether or not an object can be converted to any specific type is not know until runtime, thus it's expected to get errors when attempting to convert an object to a PowerBuilder type.
 
 The conversion functions provided have two variants:
 
@@ -143,6 +165,23 @@ Once the PyPbContext has been initialized, further calls to the `f_pypbcontextin
 With the `n_cst_pypbcontext` acquired, you can load a Python module (**.py*, *\*.pyc*, directory) using `n_cst_pypbcontext.of_loadmodule`  or directly import a Python module from site-packages (e.g. `inspect`, `os`, etc.) with  `n_cst_pypbcontext.of_import`. Both functions return a  `n_cst_pypbmodule`.
 
 #### Class instantiation and function invocation
+
+PowerBuilder and Python handle various aspects of programming differently. Here's a table comparison of some examples:
+
+| Operation               | Python                             | PowerBuider                                 | Key Difference                                               | PyPb adaptation                                              |
+| ----------------------- | ---------------------------------- | ------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Object instantiation    | `obj = Class()`                    | `obj = CREATE Class`                        | Python uses constructors; PB uses explicit CREATE instruction | `module.of_instantiate(lnv_req)`                             |
+| Object destruction      | Garbage collected                  | `DESTROY obj`                               | Python objects are destroyed on GC cycles                    | No explicit object destruction mechanism is provided         |
+| Basic function call     | `module.function()`                | `of_function()`                             | Python supports optional arguments, PB supports function overload | `lnv_module.of_invoke("function")`                           |
+| Method invocation       | `obj.method()`                     | `obj.of_method()`                           | Python binds the parameters at runtime, while in PB they're strongly typed. | `lnv_object.of_invoke("method")`                             |
+| Dynamic invocation      | `getattr(obj, target)()`           | `obj.DYNAMIC of_method()` (Limited support) | Python has native reflection; in PB it's restricted          | `lnv_object.of_invoke("method")`                             |
+| Functions as parameters | Functions are first-class citizens | Not native                                  | Python supports functional programming                       | `lnv_object.of_getmember("function", out lnv_function)`<br />`lnv_req.of_addargument("function_argument", lnv_function)` <br />`lnv_otherobject.of_invoke(lnv_req)` |
+| Anonymous functions     | lambdas                            | Not supported                               | Python allows inline function definitions                    | `n_cst_pypbobject lambda`<br />`lambda = lnv_context.of_executestatement("lambda a : a + 10")`<br/>`lambda.of_call(lnv_req)` |
+| Exception handling      | `try / except`                     | `TRY/CATCH` (+ return codes)                | Python is exception-centric; PB is mixed-model               | Exceptions thrown on Python get converted to a status code + error instance variables |
+| Type system             | Dynamic typing                     | Static typing                               | Flexibility vs compile-time safety                           | Type conversion functions that fail gracefully               |
+| Binding time            | Runtime (late binding)             | Compile-type (early binding)                | Python is flexible; PB is predictible                        | ---                                                          |
+
+> `lnv_req` stands for an appropriately configured `n_cst_invocationrequest`
 
 `n_cst_pypbmodule` may contain functions or classes. These two entities are accessed in a similar manner.
 
@@ -260,6 +299,10 @@ req.of_addNamedArgument("y", 100)
 result = _context.of_executeStatement("x * y", req)
 ll_result = result.of_toInt()
 ```
+
+#### Executing commands
+
+The `n_cst_pypbcontext` object offers the `of_executeinpythonexe(...)` method which allows you to execute commands on the `python.exe` associated to the DLL used to initialize the context. You can use this command to execute scripts directly on the Python interpreter. This command blocks execution until the command finishes executing.
 
 #### Error Handling
 
